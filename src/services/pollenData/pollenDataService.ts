@@ -112,7 +112,10 @@ export async function fetchPollenForecast(
  * Returns a filtered forecast containing only the taxons matching
  * the user's allergy profile.
  */
-export async function fetchUserPollenReport(profile: UserAllergyProfile) {
+export async function fetchUserPollenReport(
+  profile: UserAllergyProfile,
+  forceRefresh = false
+) {
   const forecast = await fetchPollenForecast(profile.station);
   const relevantTaxons = filterByAllergens(forecast, profile.allergens);
   const maxLevel = getMaxLevel(relevantTaxons);
