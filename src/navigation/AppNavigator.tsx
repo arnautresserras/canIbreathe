@@ -7,10 +7,12 @@ import { UserAllergyProfile } from '../services/pollenData/pollenDataTypes';
 import { loadProfile } from '../storage/profileStorage';
 import MainScreen from '../screens/MainScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import { useTranslation } from 'react-i18next';
 
 const Tab = createBottomTabNavigator();
 
 export function AppNavigator() {
+  const { t } = useTranslation();
   const [profile, setProfile] = useState<UserAllergyProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -61,14 +63,14 @@ export function AppNavigator() {
       >
         <Tab.Screen
           name="Today"
-          options={{ tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>🌿</Text> }}
+          options={{ tabBarLabel: t('nav.today'), tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>🌿</Text> }}
         >
           {() => <MainScreen profile={profile} />}
         </Tab.Screen>
 
         <Tab.Screen
           name="Settings"
-          options={{ tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>⚙️</Text> }}
+          options={{ tabBarLabel: t('nav.settings'), tabBarIcon: ({ color }) => <Text style={{ fontSize: 20, color }}>⚙️</Text> }}
         >
           {() => (
             <SettingsScreen
