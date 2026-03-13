@@ -15,6 +15,15 @@ import { Platform } from 'react-native';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 const PIA_BASE_URL = 'https://aerobiologia.cat/api/v0/forecast';
+const PIA_PROXY_URL = (process.env.EXPO_PUBLIC_PIA_PROXY_URL || '').replace(/\/$/, '');
+
+function buildPiaUrl(stationId: StationId): string {
+  const target = `${PIA_BASE_URL}/${stationId}/en/xml`;
+  if (Platform.OS === 'web' && PIA_PROXY_URL) {
+    return `${PIA_PROXY_URL}?url=${encodeURIComponent(target)}`;
+  }
+  return target;
+}
 const CACHE_KEY_PREFIX = 'pollen_cache_';
 const CACHE_TTL_MS = 6 * 60 * 60 * 1000; // 6 hours — PIA updates weekly, no need to hammer it
 
@@ -78,7 +87,7 @@ export async function fetchPollenForecast(
   }
 
   // 2. Fetch from PIA
-  const url = `${PIA_BASE_URL}/${stationId}/en/xml`;
+  const url = buildPiaUrl(stationId);
   console.log(`[PollenService] Fetching: ${url}`);
 
   let response: Response;
