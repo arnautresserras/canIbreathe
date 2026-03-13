@@ -69,22 +69,33 @@ export default function SettingsScreen({ onSave, onResetOnboarding }: Props) {
     await setLanguage(lang);
   }
 
-  function handleResetOnboarding() {
-    Alert.alert(
-      t('settings.account.resetTitle'),
-      t('settings.account.resetMessage'),
-      [
-        { text: t('common.cancel'), style: 'cancel' },
-        {
-          text: t('common.reset'),
-          style: 'destructive',
-          onPress: async () => {
-            await clearProfile();
-            onResetOnboarding();
+  async function handleResetOnboarding() {
+    if (IS_WEB) {
+      // Alert.alert is not supported on web
+      const confirmed = window.confirm(
+        `${t('settings.account.resetTitle')}\n\n${t('settings.account.resetMessage')}`
+      );
+      if (confirmed) {
+        await clearProfile();
+        onResetOnboarding();
+      }
+    } else {
+      Alert.alert(
+        t('settings.account.resetTitle'),
+        t('settings.account.resetMessage'),
+        [
+          { text: t('common.cancel'), style: 'cancel' },
+          {
+            text: t('common.reset'),
+            style: 'destructive',
+            onPress: async () => {
+              await clearProfile();
+              onResetOnboarding();
+            },
           },
-        },
-      ]
-    );
+        ]
+      );
+    }
   }
 
   if (!profile) return null;
