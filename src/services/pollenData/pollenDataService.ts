@@ -14,10 +14,7 @@ import {
 import { Platform } from 'react-native';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
-const PIA_BASE_URL =
-  Platform.OS === 'web'
-    ? 'https://corsproxy.io/?url=https://aerobiologia.cat/api/v0/forecast'
-    : 'https://aerobiologia.cat/api/v0/forecast';
+const PIA_BASE_URL = 'https://aerobiologia.cat/api/v0/forecast';
 const CACHE_KEY_PREFIX = 'pollen_cache_';
 const CACHE_TTL_MS = 6 * 60 * 60 * 1000; // 6 hours — PIA updates weekly, no need to hammer it
 
