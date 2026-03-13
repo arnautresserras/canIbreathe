@@ -28,7 +28,8 @@
       "baseUrl": "/canIbreathe/"
     },
     "plugins": [
-      "expo-localization"
+      "expo-localization",
+      "expo-notifications"
     ]
   }
 }
