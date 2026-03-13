@@ -25,7 +25,7 @@
     },
     "web": {
       "favicon": "./assets/favicon.png",
-      "publicPath": "/canIbreathe/"
+      "baseUrl": "/canIbreathe/"
     },
     "plugins": [
       "expo-localization"
