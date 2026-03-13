@@ -141,10 +141,6 @@ export async function scheduleDailyNotification(
   // Cancel any existing scheduled notification before rescheduling
   await Notifications.cancelAllScheduledNotificationsAsync();
 
-  // DEBUG — remove after testing
-    const scheduled = await Notifications.getAllScheduledNotificationsAsync();
-    console.log('Scheduled:', JSON.stringify(scheduled, null, 2));
-
   await Notifications.scheduleNotificationAsync({
     identifier: NOTIFICATION_ID_KEY,
     content: { title, body, sound: false },
@@ -154,6 +150,4 @@ export async function scheduleDailyNotification(
         repeats: true,
     },
     });
-
-  console.log(`[Notifications] Scheduled daily at ${profile.notificationHour}:${String(profile.notificationMinute).padStart(2, '0')} — "${title}"`);
 }

@@ -81,14 +81,12 @@ export async function fetchPollenForecast(
   if (!forceRefresh) {
     const cached = await readCache(stationId);
     if (cached) {
-      console.log(`[PollenService] Serving cached data for ${stationId}`);
       return cached;
     }
   }
 
   // 2. Fetch from PIA
   const url = buildPiaUrl(stationId);
-  console.log(`[PollenService] Fetching: ${url}`);
 
   let response: Response;
   try {
@@ -125,7 +123,7 @@ export async function fetchUserPollenReport(
   const forecast = await fetchPollenForecast(profile.station);
   const relevantTaxons = filterByAllergens(forecast, profile.allergens);
   const maxLevel = getMaxLevel(relevantTaxons);
-  const summary = buildDailySummary(relevantTaxons, POLLEN_LEVEL_LABELS);
+  const summary = buildDailySummary(relevantTaxons);
 
   return {
     forecast,
