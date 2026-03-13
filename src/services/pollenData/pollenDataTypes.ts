@@ -135,27 +135,6 @@ export const THRESHOLD_OPTIONS: ThresholdOption[] = [
   { level: 4 },
 ];
 
-// ─── Notification time options ────────────────────────────────────────────────
-export interface TimeOption {
-  hour: number;
-  minute: number;
-  label: string;
-}
-
-export const NOTIFICATION_TIMES: TimeOption[] = [
-  { hour: 5,  minute: 0,  label: '5:00 AM' },
-  { hour: 5,  minute: 30, label: '5:30 AM' },
-  { hour: 6,  minute: 0,  label: '6:00 AM' },
-  { hour: 6,  minute: 30, label: '6:30 AM' },
-  { hour: 7,  minute: 0,  label: '7:00 AM' },
-  { hour: 7,  minute: 30, label: '7:30 AM' },
-  { hour: 8,  minute: 0,  label: '8:00 AM' },
-  { hour: 8,  minute: 30, label: '8:30 AM' },
-  { hour: 9,  minute: 0,  label: '9:00 AM' },
-  { hour: 9,  minute: 30, label: '9:30 AM' },
-  { hour: 10, minute: 0,  label: '10:00 AM' },
-];
-
 // ─── User Profile ─────────────────────────────────────────────────────────────
 export interface UserAllergyProfile {
   allergens: AllergenKey[];
