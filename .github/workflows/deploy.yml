@@ -13,7 +13,7 @@ jobs:
         with:
           node-version: 20
       - run: npm ci --legacy-peer-deps
-      - run: npx expo export -p web
+      - run: npx expo export -p web --public-url /canIbreathe/
       - uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
