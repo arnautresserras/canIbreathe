@@ -35,7 +35,8 @@ export type StationId =
   | 'manresa'
   | 'roquetes'
   | 'tarragona'
-  | 'vielha';
+  | 'vielha'
+  | 'balears';
 
 export interface StationInfo {
   id: StationId;
@@ -54,6 +55,7 @@ export const STATIONS: Record<StationId, StationInfo> = {
   roquetes:   { id: 'roquetes',   name: 'Roquetes',   lat: 40.8167, lng: 0.4952, region: 'Baix Ebre' },
   tarragona:  { id: 'tarragona',  name: 'Tarragona',  lat: 41.1189, lng: 1.2445, region: 'Tarragonès' },
   vielha:     { id: 'vielha',     name: 'Vielha',     lat: 42.7025, lng: 0.7958, region: "Val d'Aran" },
+  balears:    { id: 'balears',    name: 'Palma',      lat: 39.5696, lng: 2.6502, region: 'Illes Balears' },
 };
 
 // ─── Forecast ─────────────────────────────────────────────────────────────────
@@ -72,6 +74,7 @@ export type AllergenKey =
   | 'poaceae'       // GRAM
   | 'parietaria'    // URTI
   | 'olea'          // OLEA — seasonal
+  | 'cruciferae'    // CRUC
   | 'platanus'      // PLAT
   | 'cupressaceae'  // CUPR
   | 'quercus'       // QTOT
@@ -100,6 +103,7 @@ export const ALLERGENS: AllergenInfo[] = [
   { key: 'poaceae',      emoji: '🌾' },
   { key: 'parietaria',   emoji: '🌿' },
   { key: 'olea',         emoji: '🫒' },
+  { key: 'cruciferae',   emoji: '🌼' },
   { key: 'platanus',     emoji: '🌳' },
   { key: 'cupressaceae', emoji: '🌲' },
   { key: 'quercus',      emoji: '🌰' },

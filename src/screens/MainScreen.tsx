@@ -13,11 +13,17 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { PollenTaxonWithTrend } from '../services/pollenData/pollenDataHelpers';
 import { fetchUserPollenReport } from '../services/pollenData/pollenDataService';
 import {
+  ALLERGENS,
   AllergenKey,
   POLLEN_LEVEL_COLORS,
   PollenLevel,
   UserAllergyProfile,
 } from '../services/pollenData/pollenDataTypes';
+
+// Emoji lookup by allergen key
+const ALLERGEN_EMOJI: Record<string, string> = Object.fromEntries(
+  ALLERGENS.map((a) => [a.key, a.emoji])
+);
 
 interface Props {
   profile: UserAllergyProfile;
@@ -45,9 +51,11 @@ function TaxonRow({ taxon }: { taxon: PollenTaxonWithTrend }) {
   const { t } = useTranslation();
   const translatedName = t(`allergens.${taxon.id}.name`, { defaultValue: '' });
   const displayName = translatedName || taxon.name;
+  const emoji = ALLERGEN_EMOJI[taxon.id];
 
   return (
     <View style={styles.taxonRow}>
+      {emoji ? <Text style={styles.taxonEmoji}>{emoji}</Text> : null}
       <View style={styles.taxonLeft}>
         <Text style={styles.taxonName}>{displayName}</Text>
         <Text style={styles.taxonTrend}>{t(`trends.${taxon.trend}`)}</Text>
@@ -60,9 +68,11 @@ function TaxonRow({ taxon }: { taxon: PollenTaxonWithTrend }) {
 function MissingAllergenRow({ allergenKey }: { allergenKey: AllergenKey }) {
   const { t } = useTranslation();
   const name = t(`allergens.${allergenKey}.name`, { defaultValue: allergenKey });
+  const emoji = ALLERGEN_EMOJI[allergenKey];
 
   return (
     <View style={styles.taxonRow}>
+      {emoji ? <Text style={styles.taxonEmoji}>{emoji}</Text> : null}
       <View style={styles.taxonLeft}>
         <Text style={styles.taxonName}>{name}</Text>
         <Text style={styles.taxonTrend}>{t('main.noDataHint')}</Text>
@@ -214,6 +224,7 @@ const styles = StyleSheet.create({
   sectionLabel: { fontSize: 11, fontWeight: '700', color: '#aaa', letterSpacing: 1 },
   emptyText: { fontSize: 14, color: '#aaa', fontStyle: 'italic' },
   taxonRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: 8, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: '#F0F0F0' },
+  taxonEmoji: { fontSize: 22, marginRight: 10 },
   taxonLeft: { flex: 1, marginRight: 8 },
   taxonName: { fontSize: 14, color: '#333' },
   taxonTrend: { fontSize: 11, color: '#aaa', marginTop: 2 },
