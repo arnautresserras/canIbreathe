@@ -83,6 +83,7 @@ export default {
     enabled: 'Alertas diarias',
     subtitle: 'Resumen matutino de polen',
     time: 'HORA DE NOTIFICACIÓN',
+    tapToChange: 'Toca para cambiar',
     threshold: 'AVISARME CUANDO',
     thresholds: {
       1: 'Bajo o superior',

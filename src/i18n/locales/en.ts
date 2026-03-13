@@ -83,6 +83,7 @@ export default {
     enabled: 'Daily alerts',
     subtitle: 'Morning pollen briefing',
     time: 'NOTIFICATION TIME',
+    tapToChange: 'Tap to change',
     threshold: 'ALERT ME WHEN',
     thresholds: {
       1: 'Low or above',

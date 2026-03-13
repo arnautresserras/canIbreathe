@@ -1,15 +1,15 @@
+import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Platform, StyleSheet, Switch, Text, View } from 'react-native';
+import { Platform, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
 import { OnboardingLayout } from '../components/OnboardingLayout';
 import { SelectCard } from '../components/SelectCard';
 import {
   ALLERGENS,
   AllergenKey,
   DEFAULT_PROFILE,
-  NOTIFICATION_TIMES,
   STATIONS,
   StationId,
   THRESHOLD_OPTIONS,
@@ -21,6 +21,18 @@ import { OnboardingStackParamList } from '../navigation/OnboardingNavigator';
 type Nav = NativeStackNavigationProp<OnboardingStackParamList>;
 
 const IS_WEB = Platform.OS === 'web';
+const IS_IOS = Platform.OS === 'ios';
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+function dateFromHourMinute(hour: number, minute: number): Date {
+  const d = new Date();
+  d.setHours(hour, minute, 0, 0);
+  return d;
+}
+
+function formatTime(hour: number, minute: number): string {
+  return `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+}
 
 // ─── 1. Welcome ───────────────────────────────────────────────────────────────
 export function WelcomeScreen() {
@@ -101,7 +113,6 @@ export function StationScreen() {
   async function onNext() {
     const updatedDraft = { ...draft, station: selected };
     if (IS_WEB) {
-      // Skip notifications on web — save and go straight to Summary
       const finalProfile: UserAllergyProfile = {
         ...updatedDraft,
         notificationsEnabled: false,
@@ -149,6 +160,16 @@ export function NotificationsScreen() {
   const [hour, setHour] = useState(draft.notificationHour);
   const [minute, setMinute] = useState(draft.notificationMinute);
   const [threshold, setThreshold] = useState(draft.alertThreshold);
+  // Android only — controls whether the picker dialog is open
+  const [showPicker, setShowPicker] = useState(false);
+
+  function handleTimeChange(_event: DateTimePickerEvent, date?: Date) {
+    if (Platform.OS === 'android') setShowPicker(false);
+    if (date) {
+      setHour(date.getHours());
+      setMinute(date.getMinutes());
+    }
+  }
 
   async function onNext() {
     const updatedDraft: UserAllergyProfile = {
@@ -173,6 +194,7 @@ export function NotificationsScreen() {
       onNext={onNext}
       nextLabel={t('onboarding.notifications.finishSetup')}
     >
+      {/* Enable toggle */}
       <View style={styles.row}>
         <View style={styles.rowText}>
           <Text style={styles.rowTitle}>{t('notifications.enabled')}</Text>
@@ -189,20 +211,40 @@ export function NotificationsScreen() {
       {enabled && (
         <>
           <Text style={styles.sectionLabel}>{t('notifications.time')}</Text>
-          <View style={styles.chipGrid}>
-            {NOTIFICATION_TIMES.map((time) => {
-              const isSelected = time.hour === hour && time.minute === minute;
-              return (
-                <Text
-                  key={time.label}
-                  style={[styles.chip, isSelected && styles.chipSelected]}
-                  onPress={() => { setHour(time.hour); setMinute(time.minute); }}
-                >
-                  {time.label}
-                </Text>
-              );
-            })}
-          </View>
+
+          {/* iOS — inline spinner */}
+          {IS_IOS && (
+            <View style={styles.pickerWrapper}>
+              <DateTimePicker
+                value={dateFromHourMinute(hour, minute)}
+                mode="time"
+                display="spinner"
+                onChange={handleTimeChange}
+                textColor="#1A1A1A"
+              />
+            </View>
+          )}
+
+          {/* Android — button that opens native clock dialog */}
+          {Platform.OS === 'android' && (
+            <>
+              <TouchableOpacity
+                style={styles.timeButton}
+                onPress={() => setShowPicker(true)}
+              >
+                <Text style={styles.timeButtonLabel}>{formatTime(hour, minute)}</Text>
+                <Text style={styles.timeButtonHint}>Toca per canviar</Text>
+              </TouchableOpacity>
+              {showPicker && (
+                <DateTimePicker
+                  value={dateFromHourMinute(hour, minute)}
+                  mode="time"
+                  display="default"
+                  onChange={handleTimeChange}
+                />
+              )}
+            </>
+          )}
 
           <Text style={styles.sectionLabel}>{t('notifications.threshold')}</Text>
           {THRESHOLD_OPTIONS.map((opt) => (
@@ -228,9 +270,6 @@ export function SummaryScreen() {
   const profile: UserAllergyProfile = route?.params?.profile ?? DEFAULT_PROFILE;
 
   const station = STATIONS[profile.station];
-  const timeLabel = NOTIFICATION_TIMES.find(
-    (time) => time.hour === profile.notificationHour && time.minute === profile.notificationMinute
-  )?.label ?? '7:00 AM';
 
   return (
     <View style={styles.summaryContainer}>
@@ -253,7 +292,9 @@ export function SummaryScreen() {
                 label={t('onboarding.summary.alerts')}
                 value={
                   profile.notificationsEnabled
-                    ? t('onboarding.summary.alertsDailyAt', { time: timeLabel })
+                    ? t('onboarding.summary.alertsDailyAt', {
+                        time: formatTime(profile.notificationHour, profile.notificationMinute),
+                      })
                     : t('onboarding.summary.alertsOff')
                 }
               />
@@ -270,10 +311,7 @@ export function SummaryScreen() {
 
       <View style={styles.welcomeFooter}>
         <View style={styles.startButton}>
-          <Text
-            style={styles.startLabel}
-            onPress={() => navigation.navigate('Done')}
-          >
+          <Text style={styles.startLabel} onPress={() => navigation.navigate('Done')}>
             {t('onboarding.summary.startTracking')}
           </Text>
         </View>
@@ -320,13 +358,16 @@ const styles = StyleSheet.create({
     fontSize: 11, fontWeight: '700', color: '#aaa',
     letterSpacing: 1, marginBottom: 10, marginTop: 4,
   },
-  chipGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 24 },
-  chip: {
-    paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20, backgroundColor: '#fff',
-    borderWidth: 1.5, borderColor: '#E0E0E0', fontSize: 13, color: '#555',
-    fontWeight: '500', overflow: 'hidden',
+  pickerWrapper: {
+    backgroundColor: '#fff', borderRadius: 14,
+    borderWidth: 1.5, borderColor: '#E8E8E8', marginBottom: 20, overflow: 'hidden',
   },
-  chipSelected: { backgroundColor: '#F1F8E9', borderColor: '#2E7D32', color: '#1B5E20' },
+  timeButton: {
+    backgroundColor: '#fff', borderRadius: 14, borderWidth: 1.5, borderColor: '#E8E8E8',
+    padding: 16, marginBottom: 20, alignItems: 'center',
+  },
+  timeButtonLabel: { fontSize: 32, fontWeight: '700', color: '#1A1A1A' },
+  timeButtonHint: { fontSize: 12, color: '#aaa', marginTop: 4 },
   summaryContainer: {
     flex: 1, backgroundColor: '#FAFAF8', paddingHorizontal: 24,
     paddingTop: 80, paddingBottom: 40, justifyContent: 'space-between',

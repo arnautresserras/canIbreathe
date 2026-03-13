@@ -65,8 +65,7 @@ const CODE_TO_ALLERGEN: Record<string, AllergenKey> = {
   SALI: 'salix',
   ALTE: 'alternaria',
   CLAD: 'cladosporium',
-  // Keep OLEA mapped in case it appears at other stations
-  OLEA: 'poaceae', // fallback — will show under grasses if it ever appears
+  OLEA: 'olea',
 };
 
 // ─── Extended taxon with trend ────────────────────────────────────────────────
@@ -122,6 +121,7 @@ export function parsePollenXML(xml: string, stationId: StationId): PollenForecas
       const currentLevel = rawLevel !== undefined ? parseLevel(rawLevel) : 0;
       const trend = parseTrend(String(forecastData[code] ?? ''));
       const id = CODE_TO_ALLERGEN[code] ?? code.toLowerCase();
+      if (!CODE_TO_ALLERGEN[code]) console.warn(`[PollenParser] Unmapped code: '${code}' → id: '${id}'`);
 
       taxons.push({
         id,

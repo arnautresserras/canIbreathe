@@ -6,7 +6,7 @@ import { ActivityIndicator, Text, View } from 'react-native';
 import { OnboardingNavigator } from './OnboardingNavigator';
 import { UserAllergyProfile } from '../services/pollenData/pollenDataTypes';
 import { loadProfile } from '../storage/profileStorage';
-import { debugNotifications, scheduleDailyNotification } from '../services/notificationService';
+import { scheduleDailyNotification } from '../services/notificationService';
 import MainScreen from '../screens/MainScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 

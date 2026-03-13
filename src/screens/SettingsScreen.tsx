@@ -1,3 +1,4 @@
+import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -16,7 +17,6 @@ import { setLanguage, SupportedLanguage, SUPPORTED_LANGUAGES } from '../i18n/i18
 import {
   ALLERGENS,
   AllergenKey,
-  NOTIFICATION_TIMES,
   STATIONS,
   StationId,
   THRESHOLD_OPTIONS,
@@ -30,6 +30,17 @@ interface Props {
 }
 
 const IS_WEB = Platform.OS === 'web';
+const IS_IOS = Platform.OS === 'ios';
+
+function dateFromHourMinute(hour: number, minute: number): Date {
+  const d = new Date();
+  d.setHours(hour, minute, 0, 0);
+  return d;
+}
+
+function formatTime(hour: number, minute: number): string {
+  return `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+}
 
 export default function SettingsScreen({ onSave, onResetOnboarding }: Props) {
   const insets = useSafeAreaInsets();
@@ -38,6 +49,7 @@ export default function SettingsScreen({ onSave, onResetOnboarding }: Props) {
   const [profile, setProfile] = useState<UserAllergyProfile | null>(null);
   const [saving, setSaving] = useState(false);
   const [dirty, setDirty] = useState(false);
+  const [showPicker, setShowPicker] = useState(false);
 
   useEffect(() => {
     loadProfile().then(setProfile);
@@ -56,6 +68,13 @@ export default function SettingsScreen({ onSave, onResetOnboarding }: Props) {
     update({ allergens });
   }
 
+  function handleTimeChange(_event: DateTimePickerEvent, date?: Date) {
+    if (Platform.OS === 'android') setShowPicker(false);
+    if (date) {
+      update({ notificationHour: date.getHours(), notificationMinute: date.getMinutes() });
+    }
+  }
+
   async function handleSave() {
     if (!profile) return;
     setSaving(true);
@@ -71,7 +90,6 @@ export default function SettingsScreen({ onSave, onResetOnboarding }: Props) {
 
   async function handleResetOnboarding() {
     if (IS_WEB) {
-      // Alert.alert is not supported on web
       const confirmed = window.confirm(
         `${t('settings.account.resetTitle')}\n\n${t('settings.account.resetMessage')}`
       );
@@ -202,24 +220,42 @@ export default function SettingsScreen({ onSave, onResetOnboarding }: Props) {
             {profile.notificationsEnabled && (
               <>
                 <Text style={styles.subSectionLabel}>{t('settings.notifications.time')}</Text>
-                <View style={styles.chipGrid}>
-                  {NOTIFICATION_TIMES.map((time) => {
-                    const isSelected =
-                      time.hour === profile.notificationHour &&
-                      time.minute === profile.notificationMinute;
-                    return (
-                      <Text
-                        key={time.label}
-                        style={[styles.chip, isSelected && styles.chipSelected]}
-                        onPress={() =>
-                          update({ notificationHour: time.hour, notificationMinute: time.minute })
-                        }
-                      >
-                        {time.label}
+
+                {/* iOS — inline spinner */}
+                {IS_IOS && (
+                  <View style={styles.pickerWrapper}>
+                    <DateTimePicker
+                      value={dateFromHourMinute(profile.notificationHour, profile.notificationMinute)}
+                      mode="time"
+                      display="spinner"
+                      onChange={handleTimeChange}
+                      textColor="#1A1A1A"
+                    />
+                  </View>
+                )}
+
+                {/* Android — tappable button that opens clock dialog */}
+                {Platform.OS === 'android' && (
+                  <>
+                    <TouchableOpacity
+                      style={styles.timeButton}
+                      onPress={() => setShowPicker(true)}
+                    >
+                      <Text style={styles.timeButtonLabel}>
+                        {formatTime(profile.notificationHour, profile.notificationMinute)}
                       </Text>
-                    );
-                  })}
-                </View>
+                      <Text style={styles.timeButtonHint}>{t('settings.notifications.tapToChange')}</Text>
+                    </TouchableOpacity>
+                    {showPicker && (
+                      <DateTimePicker
+                        value={dateFromHourMinute(profile.notificationHour, profile.notificationMinute)}
+                        mode="time"
+                        display="default"
+                        onChange={handleTimeChange}
+                      />
+                    )}
+                  </>
+                )}
 
                 <Text style={styles.subSectionLabel}>{t('settings.notifications.alertWhen')}</Text>
                 {THRESHOLD_OPTIONS.map((opt) => (
@@ -280,13 +316,16 @@ const styles = StyleSheet.create({
   rowText: { flex: 1 },
   rowTitle: { fontSize: 15, fontWeight: '600', color: '#333' },
   rowSubtitle: { fontSize: 12, color: '#999', marginTop: 2 },
-  chipGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 4 },
-  chip: {
-    paddingHorizontal: 14, paddingVertical: 8, borderRadius: 20, backgroundColor: '#fff',
-    borderWidth: 1.5, borderColor: '#E0E0E0', fontSize: 13, color: '#555',
-    fontWeight: '500', overflow: 'hidden',
+  pickerWrapper: {
+    backgroundColor: '#fff', borderRadius: 14,
+    borderWidth: 1.5, borderColor: '#E8E8E8', marginBottom: 20, overflow: 'hidden',
   },
-  chipSelected: { backgroundColor: '#F1F8E9', borderColor: '#2E7D32', color: '#1B5E20' },
+  timeButton: {
+    backgroundColor: '#fff', borderRadius: 14, borderWidth: 1.5, borderColor: '#E8E8E8',
+    padding: 16, marginBottom: 20, alignItems: 'center',
+  },
+  timeButtonLabel: { fontSize: 32, fontWeight: '700', color: '#1A1A1A' },
+  timeButtonHint: { fontSize: 12, color: '#aaa', marginTop: 4 },
   dangerButton: {
     borderWidth: 1.5, borderColor: '#FFCDD2', borderRadius: 14,
     paddingVertical: 14, alignItems: 'center', backgroundColor: '#FFF8F8',

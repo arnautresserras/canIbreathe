@@ -83,6 +83,7 @@ export default {
     enabled: 'Alertes diàries',
     subtitle: 'Resum matinal de pol·len',
     time: 'HORA DE NOTIFICACIÓ',
+    tapToChange: 'Toca per canviar',
     threshold: "AVISA'M QUAN",
     thresholds: {
       1: 'Baix o superior',
