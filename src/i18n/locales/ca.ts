@@ -142,6 +142,11 @@ export default {
     roquetes:   'Baix Ebre',
     tarragona:  'Tarragonès',
     vielha:     "Val d'Aran",
+    balears:    'Illes Balears',
+  },
+  nav: {
+    today: 'Avui',
+    settings: 'Configuració',
   },
   languages: {
     en: 'English',

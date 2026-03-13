@@ -11,7 +11,7 @@ export default {
     of: 'de',
   },
   welcome: {
-    title: 'canIbreathe?',
+    title: 'Can I breathe?',
     subtitle: 'Alertas diarias de polen personalizadas según tus alergias y tu ubicación en Cataluña.',
     detail: 'La configuración lleva aproximadamente 1 minuto.',
     cta: 'Empezar →',
@@ -45,7 +45,7 @@ export default {
     },
   },
   main: {
-    appName: 'canIbreathe?',
+    appName: 'Can I breathe?',
     week: 'Semana {{start}} → {{end}}',
     updated: 'Actualizado: {{time}}',
     alert: '⚠️ Alerta de alto nivel de polen para tus alérgenos',
@@ -142,6 +142,11 @@ export default {
     roquetes:   'Baix Ebre',
     tarragona:  'Tarragonès',
     vielha:     "Val d'Aran",
+    balears:    'Illes Balears',
+  },
+  nav: {
+    today: 'Hoy',
+    settings: 'Configuración',
   },
   languages: {
     en: 'English',

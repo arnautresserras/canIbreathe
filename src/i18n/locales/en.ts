@@ -112,8 +112,9 @@ export default {
     unknown:     '– Unknown',
   },
   allergens: {
-    poaceae:      { name: 'Grasses',          description: 'Very common in spring and summer' },
+    poaceae:      { name: 'Grasses',           description: 'Very common in spring and summer' },
     parietaria:   { name: 'Pellitory',         description: 'Wall pellitory — highly allergenic in Catalonia' },
+    cruciferae:   { name: 'Mustard family',    description: 'Cruciferae — spring pollinator' },
     olea:         { name: 'Olive tree',        description: 'Seasonal — peaks May to June' },
     platanus:     { name: 'Plane tree',        description: 'Urban tree, peaks in spring' },
     cupressaceae: { name: 'Cypress & Juniper', description: 'Winter to spring pollinator' },
@@ -142,6 +143,11 @@ export default {
     roquetes:   'Baix Ebre',
     tarragona:  'Tarragonès',
     vielha:     "Val d'Aran",
+    balears:    'Illes Balears',
+  },
+  nav: {
+    today: 'Today',
+    settings: 'Settings',
   },
   languages: {
     en: 'English',
