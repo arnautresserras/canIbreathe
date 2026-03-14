@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "canIbreathe",
-    "slug": "canIbreathe",
+    "slug": "can-i-breathe",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -9,10 +9,15 @@
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#F1F8E9"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.arnautr.canibreathe",
+      "buildNumber": "1",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -31,6 +36,12 @@
       "expo-localization",
       "expo-notifications",
       "@react-native-community/datetimepicker"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "cb2e4855-8f59-4274-bf58-bf2b55fb6bd3"
+      }
+    },
+    "owner": "arnautr"
   }
 }

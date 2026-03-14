@@ -1,0 +1,64 @@
+<svg width="1284" height="2778" viewBox="0 0 1284 2778" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="sphereGrad" cx="38%" cy="32%" r="62%">
+      <stop offset="0%" stop-color="#fde68a"/>
+      <stop offset="50%" stop-color="#d97706"/>
+      <stop offset="100%" stop-color="#1B5E20"/>
+    </radialGradient>
+    <radialGradient id="spikeGrad" cx="50%" cy="0%" r="100%">
+      <stop offset="0%" stop-color="#fde68a"/>
+      <stop offset="100%" stop-color="#2E7D32"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1284" height="2778" fill="#F1F8E9"/>
+
+  <!-- Sphere centre: 642, 1389 -->
+  <!-- Spike tip at cy = centre_y - sphere_r - spike_h = 1389 - 270 - 88 = 1031 -->
+  <!-- Spike ellipse cx = 642, cy = 1031 + 88/2 = 1075 ... actually position ellipse so it protrudes from sphere -->
+  <!-- Each spike: cx=642, cy=1119 (top of sphere 1389-270=1119), ry=88 means it goes from 1031 to 1207 -->
+
+  <!-- Spikes outer ring (8 long) — rotate around sphere centre 642,1389 -->
+  <ellipse cx="642" cy="1075" rx="22" ry="88" fill="url(#spikeGrad)" transform="rotate(0   642 1389)"/>
+  <ellipse cx="642" cy="1075" rx="22" ry="88" fill="url(#spikeGrad)" transform="rotate(45  642 1389)"/>
+  <ellipse cx="642" cy="1075" rx="22" ry="88" fill="url(#spikeGrad)" transform="rotate(90  642 1389)"/>
+  <ellipse cx="642" cy="1075" rx="22" ry="88" fill="url(#spikeGrad)" transform="rotate(135 642 1389)"/>
+  <ellipse cx="642" cy="1075" rx="22" ry="88" fill="url(#spikeGrad)" transform="rotate(180 642 1389)"/>
+  <ellipse cx="642" cy="1075" rx="22" ry="88" fill="url(#spikeGrad)" transform="rotate(225 642 1389)"/>
+  <ellipse cx="642" cy="1075" rx="22" ry="88" fill="url(#spikeGrad)" transform="rotate(270 642 1389)"/>
+  <ellipse cx="642" cy="1075" rx="22" ry="88" fill="url(#spikeGrad)" transform="rotate(315 642 1389)"/>
+
+  <!-- Spikes inner ring (8 shorter) -->
+  <ellipse cx="642" cy="1105" rx="16" ry="64" fill="url(#spikeGrad)" transform="rotate(22.5  642 1389)"/>
+  <ellipse cx="642" cy="1105" rx="16" ry="64" fill="url(#spikeGrad)" transform="rotate(67.5  642 1389)"/>
+  <ellipse cx="642" cy="1105" rx="16" ry="64" fill="url(#spikeGrad)" transform="rotate(112.5 642 1389)"/>
+  <ellipse cx="642" cy="1105" rx="16" ry="64" fill="url(#spikeGrad)" transform="rotate(157.5 642 1389)"/>
+  <ellipse cx="642" cy="1105" rx="16" ry="64" fill="url(#spikeGrad)" transform="rotate(202.5 642 1389)"/>
+  <ellipse cx="642" cy="1105" rx="16" ry="64" fill="url(#spikeGrad)" transform="rotate(247.5 642 1389)"/>
+  <ellipse cx="642" cy="1105" rx="16" ry="64" fill="url(#spikeGrad)" transform="rotate(292.5 642 1389)"/>
+  <ellipse cx="642" cy="1105" rx="16" ry="64" fill="url(#spikeGrad)" transform="rotate(337.5 642 1389)"/>
+
+  <!-- Main sphere (covers spike bases) -->
+  <circle cx="642" cy="1389" r="270" fill="url(#sphereGrad)"/>
+
+  <!-- Highlight -->
+  <ellipse cx="570" cy="1289" rx="80" ry="52" fill="white" opacity="0.18"/>
+
+  <!-- Texture dots -->
+  <circle cx="685" cy="1355" r="18" fill="#1B5E20" opacity="0.2"/>
+  <circle cx="610" cy="1417" r="14" fill="#1B5E20" opacity="0.16"/>
+  <circle cx="575" cy="1377" r="14" fill="#fde68a" opacity="0.3"/>
+  <circle cx="650" cy="1452" r="11" fill="#fde68a" opacity="0.25"/>
+
+  <!-- App name -->
+  <text
+    x="642"
+    y="1950"
+    text-anchor="middle"
+    font-family="-apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif"
+    font-size="96"
+    font-weight="800"
+    fill="#1B5E20"
+  >canIbreathe?</text>
+</svg>
