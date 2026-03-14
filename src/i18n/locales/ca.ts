@@ -145,6 +145,20 @@ export default {
     vielha:     "Val d'Aran",
     balears:    'Illes Balears',
   },
+  info: {
+    title: 'Guia',
+    levelsTitle: 'Nivells de pol·len',
+    allergensTitle: 'Al·lèrgens',
+    sourceTitle: 'Font de dades',
+    sourceBody: "Les dades provenen del Punt d'Informació Aerobiològica (PIA), una xarxa d'estacions de monitoratge a Catalunya operada per l'Agència de Salut Pública de Catalunya. Les previsions s'actualitzen setmanalment.",
+    levelDesc: {
+      0: 'Cap pol·len detectat. Segur per a la majoria de persones.',
+      1: 'Pol·len present però poc probable que causi símptomes en la majoria de persones.',
+      2: 'Pot causar símptomes en persones sensibles. Considera antihistamínics.',
+      3: 'Probable que causi símptomes. Pren precaucions i limita l\'exposició exterior.',
+      4: 'Nivells extrems. S\'esperen símptomes en gairebé tots els al·lèrgics.',
+    },
+  },
   nav: {
     today: 'Avui',
     settings: 'Configuració',

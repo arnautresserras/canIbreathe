@@ -145,6 +145,20 @@ export default {
     vielha:     "Val d'Aran",
     balears:    'Illes Balears',
   },
+  info: {
+    title: 'Guía',
+    levelsTitle: 'Niveles de polen',
+    allergensTitle: 'Alérgenos',
+    sourceTitle: 'Fuente de datos',
+    sourceBody: 'Los datos provienen del Punt d\'Informació Aerobiològica (PIA), una red de estaciones de monitoreo en Cataluña operada por la Agencia de Salud Pública de Cataluña. Las previsiones se actualizan semanalmente.',
+    levelDesc: {
+      0: 'Sin polen detectado. Seguro para la mayoría de personas.',
+      1: 'Polen presente pero poco probable que cause síntomas en la mayoría de personas.',
+      2: 'Puede causar síntomas en personas sensibles. Considera antihistamínicos.',
+      3: 'Probable que cause síntomas. Toma precauciones y limita la exposición exterior.',
+      4: 'Niveles extremos. Se esperan síntomas en casi todos los alérgicos.',
+    },
+  },
   nav: {
     today: 'Hoy',
     settings: 'Configuración',

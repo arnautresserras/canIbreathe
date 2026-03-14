@@ -19,6 +19,7 @@ import {
   PollenLevel,
   UserAllergyProfile,
 } from '../services/pollenData/pollenDataTypes';
+import InfoModal from './InfoModal';
 
 // Emoji lookup by allergen key
 const ALLERGEN_EMOJI: Record<string, string> = Object.fromEntries(
@@ -89,6 +90,7 @@ export default function MainScreen({ profile }: Props) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [refreshing, setRefreshing] = useState(false);
+  const [infoVisible, setInfoVisible] = useState(false);
 
   async function loadReport(forceRefresh = false) {
     try {
@@ -137,68 +139,84 @@ export default function MainScreen({ profile }: Props) {
   );
 
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={[
-        styles.content,
-        { paddingTop: insets.top + 16, paddingBottom: insets.bottom + 24 },
-      ]}
-      refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={() => { setRefreshing(true); loadReport(true); }}
-        />
-      }
-    >
-      {/* Header */}
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>{t('main.appName')}</Text>
-        <Text style={styles.headerSubtitle}>
-          {forecast.station.name} · {t(`regions.${forecast.station.id}`)}
-        </Text>
-        <Text style={styles.headerDate}>
-          {t('main.week', { start: forecast.weekStart, end: forecast.weekEnd })}
-        </Text>
-        <Text style={styles.headerFetched}>
-          {t('main.updated', { time: new Date(forecast.fetchedAt).toLocaleTimeString() })}
-        </Text>
-      </View>
+    <>
+      <InfoModal visible={infoVisible} onClose={() => setInfoVisible(false)} />
 
-      {/* Alert banner */}
-      {shouldAlert && (
-        <View style={[styles.alertBanner, { borderLeftColor: POLLEN_LEVEL_COLORS[maxLevel] }]}>
-          <Text style={styles.alertText}>{t('main.alert')}</Text>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={[
+          styles.content,
+          { paddingTop: insets.top + 16, paddingBottom: insets.bottom + 24 },
+        ]}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => { setRefreshing(true); loadReport(true); }}
+          />
+        }
+      >
+        {/* Header */}
+        <View style={styles.header}>
+          <View style={styles.headerTop}>
+            <Text style={styles.headerTitle}>{t('main.appName')}</Text>
+            <TouchableOpacity
+              style={styles.infoButton}
+              onPress={() => setInfoVisible(true)}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            >
+              <View style={styles.infoIcon}>
+                <Text style={styles.infoIconText}>i</Text>
+                <Text style={styles.infoIconLabel}>{t('info.title')}</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.headerSubtitle}>
+            {forecast.station.name} · {t(`regions.${forecast.station.id}`)}
+          </Text>
+          <Text style={styles.headerDate}>
+            {t('main.week', { start: forecast.weekStart, end: forecast.weekEnd })}
+          </Text>
+          <Text style={styles.headerFetched}>
+            {t('main.updated', { time: new Date(forecast.fetchedAt).toLocaleTimeString() })}
+          </Text>
         </View>
-      )}
 
-      {/* Merged allergens card: overall risk badge in header, per-allergen rows below */}
-      <View style={styles.card}>
-        <View style={styles.cardHeader}>
-          <Text style={styles.sectionLabel}>{t('main.yourAllergens')}</Text>
-          <LevelBadge level={maxLevel} />
-        </View>
-        {profile.allergens.length === 0 ? (
-          <Text style={styles.emptyText}>{t('main.noMatchingAllergens')}</Text>
-        ) : (
-          profile.allergens.map((allergenKey) => {
-            const taxon = taxonByAllergen.get(allergenKey);
-            return taxon
-              ? <TaxonRow key={allergenKey} taxon={taxon} />
-              : <MissingAllergenRow key={allergenKey} allergenKey={allergenKey} />;
-          })
+        {/* Alert banner */}
+        {shouldAlert && (
+          <View style={[styles.alertBanner, { borderLeftColor: POLLEN_LEVEL_COLORS[maxLevel] }]}>
+            <Text style={styles.alertText}>{t('main.alert')}</Text>
+          </View>
         )}
-      </View>
 
-      {/* All pollens this week */}
-      <View style={styles.card}>
-        <Text style={styles.sectionLabel}>{t('main.allPollens')}</Text>
-        {forecast.taxons.map((taxon) => (
-          <TaxonRow key={taxon.id} taxon={taxon as PollenTaxonWithTrend} />
-        ))}
-      </View>
+        {/* Your allergens card */}
+        <View style={styles.card}>
+          <View style={styles.cardHeader}>
+            <Text style={styles.sectionLabel}>{t('main.yourAllergens')}</Text>
+            <LevelBadge level={maxLevel} />
+          </View>
+          {profile.allergens.length === 0 ? (
+            <Text style={styles.emptyText}>{t('main.noMatchingAllergens')}</Text>
+          ) : (
+            profile.allergens.map((allergenKey) => {
+              const taxon = taxonByAllergen.get(allergenKey);
+              return taxon
+                ? <TaxonRow key={allergenKey} taxon={taxon} />
+                : <MissingAllergenRow key={allergenKey} allergenKey={allergenKey} />;
+            })
+          )}
+        </View>
 
-      <Text style={styles.attribution}>{t('main.attribution')}</Text>
-    </ScrollView>
+        {/* All pollens this week */}
+        <View style={styles.card}>
+          <Text style={styles.sectionLabel}>{t('main.allPollens')}</Text>
+          {forecast.taxons.map((taxon) => (
+            <TaxonRow key={taxon.id} taxon={taxon as PollenTaxonWithTrend} />
+          ))}
+        </View>
+
+        <Text style={styles.attribution}>{t('main.attribution')}</Text>
+      </ScrollView>
+    </>
   );
 }
 
@@ -213,7 +231,12 @@ const styles = StyleSheet.create({
   retryButton: { backgroundColor: '#2E7D32', paddingHorizontal: 24, paddingVertical: 10, borderRadius: 8 },
   retryLabel: { color: '#fff', fontWeight: '600' },
   header: { marginBottom: 16 },
+  headerTop: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   headerTitle: { fontSize: 28, fontWeight: '700', color: '#1B5E20' },
+  infoButton: { padding: 4 },
+  infoIcon: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20, backgroundColor: '#E8F5E9', flexDirection: 'row', alignItems: 'center', gap: 5 },
+  infoIconText: { fontSize: 13, fontWeight: '700', color: '#1B5E20' },
+  infoIconLabel: { fontSize: 12, fontWeight: '600', color: '#1B5E20' },
   headerSubtitle: { fontSize: 16, color: '#444', marginTop: 2 },
   headerDate: { fontSize: 13, color: '#888', marginTop: 4 },
   headerFetched: { fontSize: 11, color: '#bbb', marginTop: 2 },

@@ -146,6 +146,20 @@ export default {
     vielha:     "Val d'Aran",
     balears:    'Illes Balears',
   },
+  info: {
+    title: 'Guide',
+    levelsTitle: 'Pollen levels',
+    allergensTitle: 'Allergens',
+    sourceTitle: 'Data source',
+    sourceBody: 'Data is provided by the Aerobiology Information Point (PIA), a network of monitoring stations across Catalonia operated by the Catalan Public Health Agency. Forecasts are updated weekly.',
+    levelDesc: {
+      0: 'No pollen detected. Safe for most people.',
+      1: 'Pollen present but unlikely to cause symptoms in most allergy sufferers.',
+      2: 'May cause symptoms in sensitive individuals. Consider antihistamines.',
+      3: 'Likely to cause symptoms. Take precautions and limit outdoor exposure.',
+      4: 'Extreme levels. Symptoms expected in almost all allergy sufferers.',
+    },
+  },
   nav: {
     today: 'Today',
     settings: 'Settings',
