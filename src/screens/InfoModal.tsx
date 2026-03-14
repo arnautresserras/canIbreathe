@@ -64,7 +64,7 @@ export default function InfoModal({ visible, onClose }: Props) {
               <View key={level} style={styles.levelRow}>
                 <View style={[styles.levelDot, { backgroundColor: POLLEN_LEVEL_COLORS[level] }]} />
                 <View style={styles.levelText}>
-                  <Text style={styles.levelName}>{t(`levels.${level}`)}</Text>
+                  <Text style={styles.levelName}>{level} · {t(`levels.${level}`)}</Text>
                   <Text style={styles.levelDesc}>{t(`info.levelDesc.${level}`)}</Text>
                 </View>
               </View>

@@ -100,27 +100,34 @@ export interface AllergenInfo {
 
 // Emoji and key only — names and descriptions come from i18n
 export const ALLERGENS: AllergenInfo[] = [
+  // Grasses
   { key: 'poaceae',      emoji: '🌾' },
-  { key: 'parietaria',   emoji: '🌿' },
-  { key: 'olea',         emoji: '🫒' },
-  { key: 'cruciferae',   emoji: '🌼' },
+  // Deciduous trees
   { key: 'platanus',     emoji: '🌳' },
+  { key: 'quercus',      emoji: '🌳' },
+  { key: 'alnus',        emoji: '🌳' },
+  { key: 'fraxinus',     emoji: '🌳' },
+  { key: 'ulmus',        emoji: '🌳' },
+  { key: 'corylus',      emoji: '🌳' },
+  { key: 'acer',         emoji: '🌳' },
+  { key: 'populus',      emoji: '🌳' },
+  { key: 'salix',        emoji: '🌳' },
+  // Conifers
   { key: 'cupressaceae', emoji: '🌲' },
-  { key: 'quercus',      emoji: '🌰' },
-  { key: 'alnus',        emoji: '🍂' },
-  { key: 'fraxinus',     emoji: '🌱' },
-  { key: 'ulmus',        emoji: '🍃' },
-  { key: 'corylus',      emoji: '🫘' },
-  { key: 'acer',         emoji: '🍁' },
+  { key: 'pinus',        emoji: '🌲' },
+  // Olive
+  { key: 'olea',         emoji: '🫒' },
+  // Mediterranean shrubs
   { key: 'pistacia',     emoji: '🌺' },
-  { key: 'mercurialis',  emoji: '🌼' },
-  { key: 'moraceae',     emoji: '🫐' },
-  { key: 'pinus',        emoji: '🌴' },
-  { key: 'plantago',     emoji: '🌻' },
-  { key: 'populus',      emoji: '🏔️' },
-  { key: 'salix',        emoji: '🌊' },
+  { key: 'moraceae',     emoji: '🌺' },
+  // Herbaceous / weeds
+  { key: 'parietaria',   emoji: '🌿' },
+  { key: 'mercurialis',  emoji: '🌿' },
+  { key: 'cruciferae',   emoji: '🌿' },
+  { key: 'plantago',     emoji: '🌱' },
+  // Fungi
   { key: 'alternaria',   emoji: '🍄' },
-  { key: 'cladosporium', emoji: '🔬' },
+  { key: 'cladosporium', emoji: '🍄' },
 ];
 
 // ─── Threshold options ────────────────────────────────────────────────────────

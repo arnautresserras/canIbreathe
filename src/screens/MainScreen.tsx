@@ -34,7 +34,7 @@ function LevelBadge({ level }: { level: PollenLevel }) {
   const { t } = useTranslation();
   return (
     <View style={[styles.badge, { backgroundColor: POLLEN_LEVEL_COLORS[level] }]}>
-      <Text style={styles.badgeText}>{t(`levels.${level}`)}</Text>
+      <Text style={styles.badgeText}>{level} · {t(`levels.${level}`)}</Text>
     </View>
   );
 }
